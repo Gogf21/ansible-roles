@@ -1,0 +1,13 @@
+---
+- name: Configure webservers
+  hosts: webservers
+  become: true
+  roles:
+    - nginx
+
+- name: Configure dbservers
+  hosts: dbservers
+  become: true
+  roles:
+    - postgresql
+...
