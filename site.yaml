@@ -5,9 +5,9 @@
   roles:
     - nginx
 
-# - name: Configure dbservers
-#   hosts: dbservers
-#   become: true
-#   roles:
-#     - postgresql
+- name: Configure dbservers
+  hosts: dbservers
+  become: true
+  roles:
+    - postgresql
 ...

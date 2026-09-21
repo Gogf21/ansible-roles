@@ -1,0 +1,3 @@
+postgres_user: appuser
+postgres_password: secret123
+postgres_db: appdb
