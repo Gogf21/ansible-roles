@@ -1,0 +1,46 @@
+---
+- name: Install nginx
+  package:
+    name: nginx
+    state: present
+  notify: Restart nginx
+
+- name: Create web root directory
+  file:
+    path: "{{ nginx_root }}"
+    state: directory
+    mode: '0755'
+  notify: Restart nginx
+
+- name: Configure nginx
+  template:
+    scr: nginx.conf.j2
+    dest: /etc/nginx/http.d/default.conf
+    mode: '0644'
+  notify: Restart nginx
+
+- name: Deploy index.html
+  copy:
+    content: |
+      <html>
+        <body>
+          <h1>Hello from {{ inventory_hostname }}!</h1>
+          <p>Environment: {{ app_env }}</p>
+        </body>
+      </html>
+    dest: "{{ nginx_root }}/index.html"
+    mode: '0644'
+  notify: Restart nginx
+
+- name: Flush handlers now
+  meta: flush_handlers
+
+- name: Test nginx is working
+  uri:
+    url: "http://localhost:{{ nginx_port }}/index.html"
+    return_content: true
+  register: this
+  failed_when: "'Hello from' not in this.content"
+  tags:
+    - test
+... 
